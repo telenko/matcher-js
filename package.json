@@ -1,0 +1,19 @@
+{
+  "name": "matcher",
+  "version": "1.0.0",
+  "description": "Library to add dom extensions by attribute matchers",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack",
+    "dev-watch": "webpack --watch"
+  },
+  "author": "Andrii Telenko",
+  "license": "MIT",
+  "devDependencies": {
+    "webpack": "^4.29.5",
+    "webpack-cli": "^3.2.3",
+    "webpack-preset": "^0.2.0",
+    "webpack-preset-babel": "^0.2.0"
+  }
+}
