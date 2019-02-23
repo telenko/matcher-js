@@ -27,11 +27,11 @@ class Runner {
         node[CONTROLLER].destroy();
         delete node[CONTROLLER];
       },
-      onAttributeChanged: (node, attr) => {
+      onAttributeChanged: (node, attr, value, oldValue) => {
         if (!node[CONTROLLER]) {
           return;
         }
-        node[CONTROLLER].onAttributeChanged(attr);
+        node[CONTROLLER].onAttributeChanged(attr, value, oldValue);
       }
     });
   }

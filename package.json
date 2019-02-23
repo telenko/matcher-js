@@ -5,8 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack",
-    "dev-watch": "webpack --watch"
+    "build": "webpack --env prod",
+    "dev-watch": "webpack --watch --env dev",
+    "dev": "webpack --env dev"
   },
   "author": "Andrii Telenko",
   "license": "MIT",

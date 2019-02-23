@@ -2,35 +2,39 @@ import { RUNNER } from "./Runner";
 const NODE = Symbol();
 const EXTENSIONS = Symbol();
 const INSTANCES = Symbol();
-const OBSERVED_ATTR_MAP = Symbol();
+const INST_PUBLIC = Symbol();
 
 export class NodeController {
 
   constructor(node) {
     this[EXTENSIONS] = new Set();
     this[INSTANCES] = new Set();
-    this[OBSERVED_ATTR_MAP] = {};
+    const self = this;
+    Object.defineProperty(node, INST_PUBLIC, {
+      get() {
+        return self[INSTANCES];
+      }
+    });
     this[NODE] = node;
     if (node.attributes && node.attributes.length) {
-      [...node.attributes].forEach(applyAttribute.bind(this));
+      [...node.attributes].forEach(({ name }) => {
+        applyAttribute.call(this, name);
+      });
     }
   }
 
-  onAttributeChanged(attr) {
+  onAttributeChanged(attr, newVal, oldValue) {
     applyAttribute.call(this, attr);
     const observedAttributes = getObservedAttributes.call(this);
     if (!observedAttributes.includes(attr)) {
       return;
     }
-    const prevVal = this[OBSERVED_ATTR_MAP][attr];
-    const newVal = this[NODE].getAttribute(attr);
-    this[OBSERVED_ATTR_MAP][attr] = newVal;
     this[INSTANCES].forEach(instance => {
       if (instance.constructor.observedAttributes &&
           instance.constructor.observedAttributes.length &&
           instance.constructor.observedAttributes.includes(attr) &&
           instance.attributeChangedCallback) {
-            instance.attributeChangedCallback(attr, prevVal, newVal);//TODO why 2nd time?
+            instance.attributeChangedCallback(attr, oldValue, newVal);//TODO why 2nd time?
       }
     });
   }
@@ -46,6 +50,10 @@ export class NodeController {
     delete this[INSTANCES];
     delete this[EXTENSIONS];
     delete this[NODE];
+  }
+
+  static getInstances(node) {
+    return node[INST_PUBLIC];
   }
 
 }
@@ -85,11 +93,6 @@ function applyExtension(extClazz) {
         inst.connectedCallback();
       }
       inst.element = this[NODE];
-    }
-  });
-  getObservedAttributes.call(this).forEach(attribute => {
-    if (!this[OBSERVED_ATTR_MAP][attribute]) {
-      this[OBSERVED_ATTR_MAP][attribute] = this[NODE].getAttribute(attribute);
     }
   });
 }

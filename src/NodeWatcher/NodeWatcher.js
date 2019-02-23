@@ -3,7 +3,7 @@ const REMOVED_CALLBACK = Symbol();
 const ATTR_CHANGE_CALLBACK = Symbol();
 const OBSERVER = Symbol();
 const CONNECTED = Symbol();
-const CUR_ATTR_LIST = Symbol();
+const ATTRS_MAP = Symbol();
 
 export class NodeWatcher {
 
@@ -12,33 +12,22 @@ export class NodeWatcher {
     this[REMOVED_CALLBACK] = onNodeRemoved;
     this[ATTR_CHANGE_CALLBACK] = onAttributeChanged;
     this[OBSERVER] = new MutationObserver(mutates => {
-      for (let { type, addedNodes, removedNodes, attributeName, target } of mutates) {
+      for (let { type, addedNodes, removedNodes, attributeName, target: node } of mutates) {
           if (type === "attributes") {
-              if (!target[CONNECTED]) {
+              if (!node[CONNECTED]) {
                   return;
               }
-              const node = target;
-              const curAttributes = [...node.attributes];
-              node[CUR_ATTR_LIST].filter(oldAttr => {
-                if (oldAttr === attributeName) {
-                  return false;
-                }
-                return !curAttributes.includes(oldAttr);
-              }).forEach(removedAttribute => {
-                onAttributeChanged(target, removedAttribute);
-              });
-              node[CUR_ATTR_LIST] = curAttributes;
-              onAttributeChanged(target, attributeName);
+              detectAttributesChange.call(this, node);
               return;
           }
           if (type !== "childList") {
               return;
           }
           if (addedNodes && addedNodes.length) {
-            addedNodes.forEach(readNode);
+            addedNodes.forEach(readNode.bind(this));
           }
           if (removedNodes && removedNodes.length) {
-            removedNodes.forEach(unreadNode);
+            removedNodes.forEach(unreadNode.bind(this));
           }
       }
     });
@@ -54,11 +43,18 @@ export class NodeWatcher {
 }
 
 function readNode(node) {
+  if (isTextNode(node)) {
+    return;
+  }
   if (node[CONNECTED]) {
     return;
   }
   node[CONNECTED] = true;
-  node[CUR_ATTR_LIST] = [...node.attributes];
+  const attrsList = getAttributes(node);
+  node[ATTRS_MAP] = attrsList.reduce((acc, { name, value }) => {
+    acc[name] = { value, oldValue: undefined, active: true };
+    return acc;
+  }, {});
   this[ADDED_CALLBACK](node);
 }
 
@@ -68,6 +64,47 @@ function unreadNode(node) {
   }
   node[CONNECTED] = false;
   this[REMOVED_CALLBACK](node);
+}
+
+function getAttributes(node) {
+  return node.attributes ? [...node.attributes] : [];
+}
+
+function detectAttributesChange(node) {
+  const currentAttrs = getAttributes(node);
+  currentAttrs.forEach(({name, value}) => {
+    const oldAttr = node[ATTRS_MAP][name] || {};
+    node[ATTRS_MAP][name] = {
+      value,
+      oldValue: oldAttr.value,
+      active: true
+    };
+  });
+  Object.keys(node[ATTRS_MAP]).filter(attr => {
+    return !currentAttrs.map(curAttr => curAttr.name).includes(attr);
+  }).forEach(attr => {
+    const deletedAttr = node[ATTRS_MAP][attr] || {};
+    node[ATTRS_MAP][attr] = {
+      value: undefined,
+      oldValue: deletedAttr.value,
+      active: false
+    };
+  });
+
+  Object.keys(node[ATTRS_MAP]).filter(attr => {
+    const { value, oldValue } = node[ATTRS_MAP][attr];
+    return value !== oldValue;
+  }).forEach(modifiedAttr => {
+    const { value, oldValue } = node[ATTRS_MAP][modifiedAttr];
+    this[ATTR_CHANGE_CALLBACK](node, modifiedAttr, value, oldValue);
+  });
+
+  //cleanup for not active attrs
+  Object.keys(node[ATTRS_MAP]).filter(attr => {
+    return !node[ATTRS_MAP][attr].active;
+  }).forEach(deletedAttr => {
+    delete node[ATTRS_MAP][deletedAttr];
+  });
 }
 
 function processNodeRecursive(node, callback) {
