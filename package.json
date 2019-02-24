@@ -1,8 +1,9 @@
 {
-  "name": "matcher",
+  "name": "@telenko/matcher",
   "version": "1.0.0",
   "description": "Library to add dom extensions by attribute matchers",
-  "main": "index.js",
+  "main": "src/index.js",
+  "module": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack --env prod",
@@ -16,5 +17,9 @@
     "webpack-cli": "^3.2.3",
     "webpack-preset": "^0.2.0",
     "webpack-preset-babel": "^0.2.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com:telenko/matcher-js.git"
   }
 }

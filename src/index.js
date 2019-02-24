@@ -19,7 +19,7 @@ export function getMatchers(node) {
   return NodeController.getInstances(node);
 }
 
-customElements.define("extension-container", ExtensionContainer);
+customElements.define("matchers-container", ExtensionContainer);
 
 let readyHandler = () => {
     RUNNER.run();
