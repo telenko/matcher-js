@@ -11,9 +11,10 @@ So with CustomElements definition we are able to extend DOM with whathever we wa
 My vision that - **no**. And below why.
 
 1) Reusable attributes - matchers
+
 In current DOM API there are set of reusable attributes which can work for any html element: 'title', 'aria-label', 'role', 'class', 'id' etc. All these attributes are responsible for some behavior for a node, to which they are connected. If programically or via inspector such attribute will be removed - then it will be disconnected from "node". Looks pretty similar to "something" isn't it? Some piece of code can be "connected" to node by some "condition" and "disconnected" when this condition won't match anymore.
 
-Since these attributes are not just regular attributes I've decided to invent a separate term for them - Matcher. Matcher is an entity which connects to html node when node matches matcher's condition. When node stops match this condition - matcher disconnects from a node.
+Since these attributes are not just regular attributes I've decided to invent a separate term for them - **Matcher**. Matcher is an entity which connects to html node when node matches matcher's condition. When node stops match this condition - matcher disconnects from a node.
 
 Imagine that we want to implement new tooltip for our DOM elements and we want it to look much more modern than default native 'title'. We can write a new matcher with condition (f.e.) [custom-title] and then use it everywhere in our DOM:
 ```HTML
@@ -37,6 +38,7 @@ Lots of new libraries implements tooltip-like features via web components like t
 which I think is not pretty good usage for web components.
 
 2) Extending native elements
+
 Imagine that we need to support one more 'type' for input element - 'phone'. What will we do now? Hmmm, I think we can write a web component which will be a wrapper for a native one, support new type and it should definetely REFLECT everything we have in HTMLInputElement! Isn't it too costly for a one more type??
 
 ```HTML
@@ -48,12 +50,12 @@ Which matchers we can define new matcher for already working input element and u
 <input type='phone'/>
 ```
 
-To summarize, I want to highlight that I'm really a fan of new web components technologies, but I think that it is not appropriate everywhere. In some cases matchers are more suitable and easy to mainain.
+To summarize, I want to highlight that I'm really a fan of new web components technologies, but I think that it is not appropriate everywhere. In some cases matchers are more suitable and easy to maintain.
 
 # Difference between matcher and custom element
-| Technology                       | Custom element                   | Matcher                          |
+| Criteria                         | Custom element                   | Matcher                          |
 | -------------------------------- | -------------------------------- | -------------------------------- |
-| matches when                     | by tagname                       | by attribute                     |
+| matches by                       | by tagname                       | by attribute                     |
 | when created (constructor call)  | html element create              | right before connectedCallback() |
 | phase when connected             | connectedCallback()              | connectedCallback()              |
 | phase when disconnected          | disconnectedCallback()           | disconnectedCallback()           |
@@ -160,4 +162,4 @@ container.shadowRoot.innerHTML = `
 ```
 
 # Development status
-Core functionality works. Currently library is under performance and unit testing state.
+Core functionality works. Currently library is under performance and unit testing coverage.
