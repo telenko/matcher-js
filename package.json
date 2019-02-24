@@ -1,5 +1,5 @@
 {
-  "name": "@telenko/matcher",
+  "name": "@mangolik9/matcher",
   "version": "1.0.0",
   "description": "Library to add dom extensions by attribute matchers",
   "main": "src/index.js",
@@ -20,11 +20,22 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com:telenko/matcher-js.git"
+    "url": "git+ssh://git@github.com/telenko/matcher-js.git"
   },
   "keywords": [
-      "webcomponents",
-      "DOM",
-      "custom-elements"
-  ]
+    "webcomponents",
+    "DOM",
+    "custom-elements"
+  ],
+  "bugs": {
+    "url": "https://github.com/telenko/matcher-js/issues"
+  },
+  "homepage": "https://github.com/telenko/matcher-js#readme",
+  "dependencies": {
+    "babel-core": "^6.26.3",
+    "babel-loader": "^8.0.5",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "uglifyjs-webpack-plugin": "^2.1.1",
+    "webpack-preset-babel-stage-0": "^0.2.0"
+  }
 }
