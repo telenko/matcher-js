@@ -1,5 +1,5 @@
 {
-  "name": "@mangolik9/matcher",
+  "name": "@telenko/matcher",
   "version": "1.0.0",
   "description": "Library to add dom extensions by attribute matchers",
   "main": "src/index.js",

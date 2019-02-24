@@ -70,11 +70,11 @@ As you see API of defining matcher is very-very similar to custom elements (one 
 
 1) Install library
 ```
-npm i @mangolik9/matcher
+npm i @telenko/matcher
 ```
 2) Include library to your code-base
 ```
-import { defineMatcher, getMatchers } from '@mangolik9/matcher';
+import { defineMatcher, getMatchers } from '@telenko/matcher';
 ```
 3) Define matchers via `defineMatcher` function
 ```
@@ -140,7 +140,7 @@ const matchers = getMatchers(inputWithDatepicker); // [DatepickerMatcher]
 Since **matcher-js** is based on MutationObserver there are 2 ways to use matchers inside ShadowDOM:
 1) Use 'patchShadowDOM' function (**should be called only once!!!**)
 ```
-import { patchShadowDOM } from '@mangolik9/matcher';
+import { patchShadowDOM } from '@telenko/matcher';
 patchShadowDOM();//will patch native .attachShadow() function with matchers support
 
 const container = document.createElement("div");
