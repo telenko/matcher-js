@@ -37,7 +37,7 @@ export class NodeWatcher {
     processNodeRecursive.call(this, node, processedNode => {
       readNode.call(this, processedNode);
     });
-    this[OBSERVER].observe(node, { childList: true, subtree: true, attributes: true });//TODO attrs filter!!! TODO unsubscribe!!!
+    this[OBSERVER].observe(node, { childList: true, subtree: true, attributes: true });
   }
 
 }

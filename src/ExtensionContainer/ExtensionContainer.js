@@ -4,9 +4,7 @@ export class ExtensionContainer extends HTMLElement {
 
   connectedCallback() {
     RUNNER.apply(this);
-    this.styles.display = "contents";
+    this.style.display = "contents";
   }
-
-  //todo disconnectedCallback
 
 }

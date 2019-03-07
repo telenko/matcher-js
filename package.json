@@ -1,6 +1,6 @@
 {
   "name": "@telenko/matcher",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Library to add dom extensions by attribute matchers",
   "main": "src/index.js",
   "module": "src/index.js",

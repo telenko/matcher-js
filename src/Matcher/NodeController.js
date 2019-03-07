@@ -34,7 +34,7 @@ export class NodeController {
           instance.constructor.observedAttributes.length &&
           instance.constructor.observedAttributes.includes(attr) &&
           instance.attributeChangedCallback) {
-            instance.attributeChangedCallback(attr, oldValue, newVal);//TODO why 2nd time?
+            instance.attributeChangedCallback(attr, oldValue, newVal);
       }
     });
   }

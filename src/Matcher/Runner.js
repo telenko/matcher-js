@@ -73,6 +73,4 @@ if (window.__extensionRunner) {
   runner = new Runner();
 }
 
-// if (window)
 export const RUNNER = runner;
-//TODO doc ready functionality
