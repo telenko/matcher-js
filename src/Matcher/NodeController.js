@@ -89,10 +89,10 @@ function applyExtension(extClazz) {
     if (!hasInst) {
       const inst = new ExtClazz();
       this[INSTANCES].add(inst);
+      inst.element = this[NODE];
       if (inst.connectedCallback) {
         inst.connectedCallback();
       }
-      inst.element = this[NODE];
     }
   });
 }
