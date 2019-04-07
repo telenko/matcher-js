@@ -1,11 +1,11 @@
 {
   "name": "@telenko/matcher",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Library to add dom extensions by attribute matchers",
   "main": "src/index.js",
   "module": "src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "karma start --env dev --single-run --browsers ChromeHeadless karma.conf.js",
     "build": "webpack --env prod",
     "dev-watch": "webpack --watch --env dev",
     "dev": "webpack --env dev"
@@ -13,6 +13,16 @@
   "author": "Andrii Telenko",
   "license": "MIT",
   "devDependencies": {
+    "@babel/core": "^7.4.3",
+    "chai": "^4.2.0",
+    "karma": "^4.0.1",
+    "karma-chai": "^0.1.0",
+    "karma-chrome-launcher": "^2.2.0",
+    "karma-mocha": "^1.3.0",
+    "karma-sinon": "^1.0.5",
+    "karma-webpack": "^3.0.5",
+    "mocha": "^6.0.2",
+    "sinon": "^7.3.1",
     "webpack": "^4.29.5",
     "webpack-cli": "^3.2.3",
     "webpack-preset": "^0.2.0",

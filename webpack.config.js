@@ -1,11 +1,12 @@
 module.exports = env => {
+    const isDev = env === 'dev';
     return {
-        mode: env === "dev" ? "development" : "production",
+        mode: isDev ? "development" : "production",
         entry: "./src/index.js",
         devtool: "sourcemap",
         output: {
             path: __dirname + "/dist",
-            filename: "matcherjs.min.js"
+            filename: `matcherjs${isDev ? '' : '.min'}.js`
         },
         module: {
             rules: [

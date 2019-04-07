@@ -4,7 +4,7 @@ const EXTENSIONS = Symbol();
 const INSTANCES = Symbol();
 const INST_PUBLIC = Symbol();
 
-export class NodeController {
+class NodeController {
 
   constructor(node) {
     this[EXTENSIONS] = new Set();
@@ -12,7 +12,7 @@ export class NodeController {
     const self = this;
     Object.defineProperty(node, INST_PUBLIC, {
       get() {
-        return self[INSTANCES];
+        return [...self[INSTANCES]];
       }
     });
     this[NODE] = node;
@@ -126,3 +126,10 @@ function disconnectInstance(inst) {
     inst.disconnectedCallback();
   }
 }
+
+if (!window.__extensionController) {
+  window.__extensionController = NodeController;
+}
+const ClazzExport = window.__extensionController;
+
+export { ClazzExport as NodeController };

@@ -24,10 +24,18 @@ export class NodeWatcher {
               return;
           }
           if (addedNodes && addedNodes.length) {
-            addedNodes.forEach(readNode.bind(this));
+              addedNodes.forEach(node => {
+                processNodeRecursive.call(this, node, processedNode => {
+                  readNode.call(this, processedNode);
+                });
+              });
           }
           if (removedNodes && removedNodes.length) {
-            removedNodes.forEach(unreadNode.bind(this));
+              removedNodes.forEach(node => {
+                processNodeRecursive.call(this, node, processedNode => {
+                  unreadNode.call(this, processedNode);
+                });
+              });
           }
       }
     });
@@ -43,7 +51,7 @@ export class NodeWatcher {
 }
 
 function readNode(node) {
-  if (isTextNode(node)) {
+  if (isTextNode(node) || isCommentNode(node)) {
     return;
   }
   if (node[CONNECTED]) {
@@ -108,7 +116,7 @@ function detectAttributesChange(node) {
 }
 
 function processNodeRecursive(node, callback) {
-    if (isTextNode(node)) {
+    if (isTextNode(node) || isCommentNode(node)) {
       return;
     }
     callback(node);
@@ -124,4 +132,11 @@ function isTextNode(node) {
         return false;
     }
     return node.nodeType === Node.TEXT_NODE;
+}
+
+function isCommentNode(node) {
+  if (!(node instanceof Node)) {
+    return false;
+  }
+  return node.nodeType === Node.COMMENT_NODE;
 }

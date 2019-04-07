@@ -1,4 +1,3 @@
-
 import { NodeWatcher } from "../NodeWatcher/NodeWatcher";
 import { NodeController } from "./NodeController";
 import { MatcherQuery } from "./MatcherQuery";
@@ -16,6 +15,9 @@ class Runner {
     this[CONTROLS] = new Set();
     this[WATCHER] = new NodeWatcher({
       onNodeAdded: node => {
+        if (!(node instanceof HTMLElement)) {
+          return;
+        }
         node[CONTROLLER] = new NodeController(node);
         this[CONTROLS].add(node[CONTROLLER]);
       },
@@ -71,6 +73,7 @@ if (window.__extensionRunner) {
   runner = window.__extensionRunner;
 } else {
   runner = new Runner();
+  window.__extensionRunner = runner;
 }
 
 export const RUNNER = runner;
